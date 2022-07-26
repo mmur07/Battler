@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace battler{
     [CreateAssetMenu(fileName = "Minion",
-        menuName = "Battler/Minion", order = 0)]
+        menuName = "Battler/Minion")]
     public class Minion : Card
     {
         [SerializeField] private int baseAtk;
@@ -12,6 +12,15 @@ namespace battler{
 
         private int currentATK;
         private int currentHP;
+
+        public override CardType type
+        {
+            get
+            {
+                return CardType.Minion;
+            }
+        }
+
         //public Effect DeathRattle;
         //public Effect Battlecry;
 
