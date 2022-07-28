@@ -35,6 +35,24 @@ namespace battler
             cards.RemoveAt(cardIndex);
         }
 
+        private void Update()
+        {
+            float xJumpPerCard = handMaxWidth / (cards.Count + 1);
+            float iniPos = -handMaxWidth * 0.5f;
+
+            for (int k = 0; k < cards.Count; k++)
+            {
+                float yPos = Mathf.Sin((float)(k + 1) / (cards.Count + 1) * Mathf.PI) * handMaxHeight;
+                RectTransform cardTransform = cards[k].GetComponent<RectTransform>();
+                cardTransform.anchoredPosition = new Vector2(iniPos + (xJumpPerCard * (k + 1)), yPos);
+
+                Vector3 lookPos = cardLookPosition.anchoredPosition - cardTransform.anchoredPosition;
+                Quaternion rotation = Quaternion.LookRotation(lookPos);
+                cardTransform.rotation = rotation;
+                cardTransform.transform.Rotate(0, -90, 90);
+            }
+        }
+
         private void RecalculateCardPositions()
         {
             float xJumpPerCard = handMaxWidth / (cards.Count + 1);
@@ -50,7 +68,6 @@ namespace battler
                 Quaternion rotation = Quaternion.LookRotation(lookPos);
                 cardTransform.rotation = rotation;
                 cardTransform.transform.Rotate(0, -90, 90);
-                //cardTransform.transform.Rotate(0, 0, -cardTransform.localEulerAngles.z * 2);
             }
         }
     }
