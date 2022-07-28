@@ -12,9 +12,13 @@ namespace battler
         [SerializeField] private TMP_Text nameText;
         [SerializeField] private TMP_Text descriptionText;
         [SerializeField] private Image sprite;
+        [Header("Animation settings")]
         [SerializeField] private RectTransform animationRect;
         [SerializeField] private AnimationClip unhoverClip;
         [SerializeField] private AnimationClip hoverClip;
+        [SerializeField] private float onHoverScale = 1.25f;
+        [SerializeField] private float onHoverOffsetY = 15f;
+        [SerializeField] private float onHoverAnimTime = 0.33f;
 
         private bool pointerHover = false;
         private Animation animation;
@@ -48,18 +52,15 @@ namespace battler
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            Debug.Log("Sali");
             pointerHover = false;
 
-            float startTime = 0f;
-            float endTime = .33f;
-            float endScale = 1f;
-            float endYOffset = 25f;
-            
-            AnimationCurve curve1 = AnimationCurve.Linear(startTime, animationRect.localScale.x, endTime, endScale);
-            AnimationCurve curve2 = AnimationCurve.Linear(startTime, animationRect.localScale.y, endTime, endScale);
+            AnimationCurve curve1 = AnimationCurve.Linear(0f, animationRect.localScale.x, onHoverAnimTime, 1f);
+            AnimationCurve curve2 = AnimationCurve.Linear(0f, animationRect.localScale.y, onHoverAnimTime, 1f);
+            AnimationCurve curve3 = AnimationCurve.Linear(0f, animationRect.anchoredPosition.y, onHoverAnimTime, 0f);
+
             unhoverClip.SetCurve("", typeof(RectTransform), "m_LocalScale.x", curve1);
             unhoverClip.SetCurve("", typeof(RectTransform), "m_LocalScale.y", curve2);
+            unhoverClip.SetCurve("", typeof(RectTransform), "m_AnchoredPosition.y", curve3);
 
             animation.AddClip(unhoverClip, unhoverClip.name);
             animation.Play(unhoverClip.name);
@@ -67,19 +68,15 @@ namespace battler
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            Debug.Log("Entre");
             pointerHover = true;
 
-            float startTime = 0f;
-            float endTime = .33f;
-            float endScale = 1.25f;
-            float endYOffset = 25f;
-
-            AnimationCurve curve1 = AnimationCurve.Linear(startTime, animationRect.localScale.x, endTime, endScale);
-            AnimationCurve curve2 = AnimationCurve.Linear(startTime, animationRect.localScale.y, endTime, endScale);
+            AnimationCurve curve1 = AnimationCurve.Linear(0f, animationRect.localScale.x, onHoverAnimTime, onHoverScale);
+            AnimationCurve curve2 = AnimationCurve.Linear(0f, animationRect.localScale.y, onHoverAnimTime, onHoverScale);
+            AnimationCurve curve3 = AnimationCurve.Linear(0f, animationRect.anchoredPosition.y, onHoverAnimTime, onHoverOffsetY);
 
             hoverClip.SetCurve("", typeof(RectTransform), "m_LocalScale.x", curve1);
             hoverClip.SetCurve("", typeof(RectTransform), "m_LocalScale.y", curve2);
+            hoverClip.SetCurve("", typeof(RectTransform), "m_AnchoredPosition.y", curve3);
 
             animation.AddClip(hoverClip, hoverClip.name);
             animation.Play(hoverClip.name);
