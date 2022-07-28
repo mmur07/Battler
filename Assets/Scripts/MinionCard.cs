@@ -6,13 +6,10 @@ using TMPro;
 
 namespace battler
 {
-    public class MinionCard : MonoBehaviour
+    public class MinionCard : PlayableCard
     {
         [SerializeField] private TMP_Text hpText;
         [SerializeField] private TMP_Text atkText;
-        [SerializeField] private TMP_Text nameText;
-        [SerializeField] private TMP_Text descriptionText;
-        [SerializeField] private Image sprite;
 
         private Minion minion;
 
@@ -39,21 +36,6 @@ namespace battler
         public void setATK(int atk)
         {
             atkText.text = atk.ToString();
-        }
-
-        public void setName(string name)
-        {
-            nameText.text = name;
-        }
-
-        public void setDescription(string description)
-        {
-            descriptionText.text = description;
-        }
-
-        public void setSprite(Sprite sprt)
-        {
-            sprite.sprite = sprt;
         }
     }
 }
