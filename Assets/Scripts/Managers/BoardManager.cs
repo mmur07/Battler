@@ -28,10 +28,10 @@ namespace battler
             AddCardToHand(minionToCreate);
             AddCardToHand(spellToCreate);
             AddCardToHand(minionToCreate);
-            //AddCardToHand(minionToCreate);
-            //AddCardToHand(minionToCreate);
-            //AddCardToHand(minionToCreate);
-            //AddCardToHand(minionToCreate);
+            AddCardToHand(minionToCreate);
+            AddCardToHand(minionToCreate);
+            AddCardToHand(minionToCreate);
+            AddCardToHand(minionToCreate);
         }
 
         public void AddCardToHand(Card card)

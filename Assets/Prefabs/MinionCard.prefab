@@ -872,7 +872,7 @@ RectTransform:
   m_GameObject: {fileID: 2663828760219574087}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2663828759242634507}
@@ -902,11 +902,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2921ebc7be2eb66478540dfa5c23b205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hpText: {fileID: 2663828759871652765}
-  atkText: {fileID: 2663828759763344792}
   nameText: {fileID: 2663828759337479300}
   descriptionText: {fileID: 2663828760338262762}
   sprite: {fileID: 2663828759620738882}
+  hpText: {fileID: 2663828759871652765}
+  atkText: {fileID: 2663828759763344792}
 --- !u!1 &2663828760338262760
 GameObject:
   m_ObjectHideFlags: 0

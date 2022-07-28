@@ -9,7 +9,9 @@ namespace battler
         [SerializeField] private float handMaxWidth = 20f;
         [SerializeField] private float handMaxHeight = 15f;
         [SerializeField] private RectTransform canvas;
+        [SerializeField] private RectTransform cardLookPosition;
         private List<PlayableCard> cards = new List<PlayableCard>();
+        
 
         private void Start()
         {
@@ -40,7 +42,15 @@ namespace battler
 
             for(int k = 0; k < cards.Count; k++)
             {
-                cards[k].GetComponent<RectTransform>().anchoredPosition = new Vector2(iniPos + (xJumpPerCard * (k + 1)), 0);
+                float yPos = Mathf.Sin((float)(k + 1) / (cards.Count + 1) * Mathf.PI) * handMaxHeight;
+                RectTransform cardTransform = cards[k].GetComponent<RectTransform>();
+                cardTransform.anchoredPosition = new Vector2(iniPos + (xJumpPerCard * (k + 1)), yPos);
+
+                Vector3 lookPos = cardLookPosition.anchoredPosition - cardTransform.anchoredPosition;
+                Quaternion rotation = Quaternion.LookRotation(lookPos);
+                cardTransform.rotation = rotation;
+                cardTransform.transform.Rotate(0, -90, 90);
+                //cardTransform.transform.Rotate(0, 0, -cardTransform.localEulerAngles.z * 2);
             }
         }
     }
