@@ -8,7 +8,7 @@ namespace battler
     {
         [SerializeField] private GameObject minionCardPrefab;
         [SerializeField] private GameObject spellCardPrefab;
-        [SerializeField] private Transform canvas;
+        [SerializeField] private Canvas canvas;
         [SerializeField] private Hand playerHand;
 
         public Minion minionToCreate;
@@ -41,16 +41,18 @@ namespace battler
             {
                 case CardType.Minion:
                     c = Instantiate(minionCardPrefab, playerHand.transform);
-                    MinionCard newMinion = c.GetComponent<MinionCard>();
-                    newMinion.Init(minionToCreate);
-                    playerHand.AddCard(newMinion);
+                    MinionCard newMinionCard = c.GetComponent<MinionCard>();
+                    newMinionCard.Init(minionToCreate);
+                    newMinionCard.SetReferences(canvas, playerHand);
+                    playerHand.AddCard(newMinionCard);
                     break;
 
                 case CardType.Spell:
                     c = Instantiate(spellCardPrefab, playerHand.transform);
-                    SpellCard newSpell = c.GetComponent<SpellCard>();
-                    newSpell.Init(spellToCreate);
-                    playerHand.AddCard(newSpell);
+                    SpellCard newSpellCard = c.GetComponent<SpellCard>();
+                    newSpellCard.Init(spellToCreate);
+                    newSpellCard.SetReferences(canvas, playerHand);
+                    playerHand.AddCard(newSpellCard);
                     break;
             }
         }

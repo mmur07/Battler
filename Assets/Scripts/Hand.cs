@@ -11,7 +11,8 @@ namespace battler
         [SerializeField] private RectTransform canvas;
         [SerializeField] private RectTransform cardLookPosition;
         private List<PlayableCard> cards = new List<PlayableCard>();
-        
+
+        private bool isDraggingCard = false;
 
         private void Start()
         {
@@ -57,6 +58,18 @@ namespace battler
                 if(cardTransform.transform.rotation.y > 0) cardTransform.transform.Rotate(0, -90, 90);
                 else cardTransform.transform.Rotate(0, 90, -90);
             }
+        }
+
+        //---------------------------------------------------
+
+        public void SetDraggingCard(bool drag)
+        {
+            isDraggingCard = drag;
+        }
+
+        public bool IsDraggingCard()
+        {
+            return isDraggingCard;
         }
     }
 }
