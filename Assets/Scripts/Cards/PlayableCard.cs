@@ -19,6 +19,7 @@ namespace battler
         [SerializeField] private float onHoverScale = 1.25f;
         [SerializeField] private float onHoverOffsetY = 15f;
         [SerializeField] private float onHoverAnimTime = 0.33f;
+        [SerializeField] private float returnToHandAnimTime = 10f;
         private Animation animation;
         private RectTransform transform;
         private CanvasGroup canvasGroup;
@@ -27,6 +28,12 @@ namespace battler
         private bool isPointerClicked = false;
         private Canvas canvas;
         private Hand hand;
+
+        private Vector3 endPosition;
+        private Vector3 startPosition;
+        private float elapsedTime = 0f;
+
+        private bool moving = false;
 
         //----------------------------------------
         private void Start()
@@ -40,6 +47,25 @@ namespace battler
                 return;
             }
 #endif
+        }
+
+        private void Update()
+        {
+            if(moving)
+            {
+                elapsedTime += Time.deltaTime;
+                float percentageComplete = elapsedTime / returnToHandAnimTime;
+
+                transform.position = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0, 1, percentageComplete));
+                Debug.Log(transform.position);
+
+                if(percentageComplete >= 1f)
+                {
+                    Debug.Log("TERMINADO");
+                    elapsedTime = 0f;
+                    moving = false;
+                }
+            }
         }
 
         public void setName(string name)
@@ -100,8 +126,9 @@ namespace battler
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (!hand.IsDraggingCard())
+            if (!hand.IsDraggingCard() && !moving)
             {
+                endPosition = transform.position;
                 isPointerClicked = false;
                 canvasGroup.blocksRaycasts = false;
                 hand.SetDraggingCard(true);
@@ -112,6 +139,8 @@ namespace battler
         {
             if (hand.IsDraggingCard())
             {
+                startPosition = transform.position;
+                moving = true;
                 isPointerClicked = true;
                 canvasGroup.blocksRaycasts = true;
                 hand.SetDraggingCard(false);
@@ -121,6 +150,13 @@ namespace battler
         public void OnDrag(PointerEventData eventData)
         {
             if(hand.IsDraggingCard()) transform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+        }
+
+        //------------------------------------------------------
+
+        public bool isMoving()
+        {
+            return moving;
         }
     }
 }
