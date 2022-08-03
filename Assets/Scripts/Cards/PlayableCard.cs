@@ -55,7 +55,7 @@ namespace battler
                 elapsedTime += Time.deltaTime;
                 float percentageComplete = elapsedTime / returnToHandAnimTime;
 
-                transform.position = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0, 1, percentageComplete));
+                transform.anchoredPosition = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0, 1, percentageComplete));
 
                 if(percentageComplete >= 1f)
                 {
@@ -124,7 +124,7 @@ namespace battler
         {
             if (!hand.IsDraggingCard() && !moving)
             {
-                endPosition = transform.position;
+                endPosition = transform.anchoredPosition;
                 canvasGroup.blocksRaycasts = false;
                 hand.SetDraggingCard(true);
             }
@@ -134,7 +134,7 @@ namespace battler
         {
             if (hand.IsDraggingCard())
             {
-                startPosition = transform.position;
+                startPosition = transform.anchoredPosition;
                 moving = true;
                 canvasGroup.blocksRaycasts = true;
                 hand.SetDraggingCard(false);
@@ -151,6 +151,11 @@ namespace battler
         public bool isMoving()
         {
             return moving;
+        }
+
+        public void setEndAnimPosition(Vector2 endPos)
+        {
+            endPosition = endPos;
         }
     }
 }
