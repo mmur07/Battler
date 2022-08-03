@@ -24,8 +24,6 @@ namespace battler
         private RectTransform transform;
         private CanvasGroup canvasGroup;
 
-        private bool pointerHover = false;
-        private bool isPointerClicked = false;
         private Canvas canvas;
         private Hand hand;
 
@@ -51,17 +49,16 @@ namespace battler
 
         private void Update()
         {
+            //Apply LERP animation
             if(moving)
             {
                 elapsedTime += Time.deltaTime;
                 float percentageComplete = elapsedTime / returnToHandAnimTime;
 
                 transform.position = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0, 1, percentageComplete));
-                Debug.Log(transform.position);
 
                 if(percentageComplete >= 1f)
                 {
-                    Debug.Log("TERMINADO");
                     elapsedTime = 0f;
                     moving = false;
                 }
@@ -91,8 +88,7 @@ namespace battler
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            pointerHover = false;
-
+            //This animation returns the original scale and position of the card
             AnimationCurve curve1 = AnimationCurve.Linear(0f, animationRect.localScale.x, onHoverAnimTime, 1f);
             AnimationCurve curve2 = AnimationCurve.Linear(0f, animationRect.localScale.y, onHoverAnimTime, 1f);
             AnimationCurve curve3 = AnimationCurve.Linear(0f, animationRect.anchoredPosition.y, onHoverAnimTime, 0f);
@@ -107,10 +103,10 @@ namespace battler
 
         public void OnPointerEnter(PointerEventData eventData)
         {
+            //Hovering animation will only start if the user's not selecting a different card
             if (!hand.IsDraggingCard())
             {
-                pointerHover = true;
-
+                //This animation scales up the card and moves it a little bit up
                 AnimationCurve curve1 = AnimationCurve.Linear(0f, animationRect.localScale.x, onHoverAnimTime, onHoverScale);
                 AnimationCurve curve2 = AnimationCurve.Linear(0f, animationRect.localScale.y, onHoverAnimTime, onHoverScale);
                 AnimationCurve curve3 = AnimationCurve.Linear(0f, animationRect.anchoredPosition.y, onHoverAnimTime, onHoverOffsetY);
@@ -129,7 +125,6 @@ namespace battler
             if (!hand.IsDraggingCard() && !moving)
             {
                 endPosition = transform.position;
-                isPointerClicked = false;
                 canvasGroup.blocksRaycasts = false;
                 hand.SetDraggingCard(true);
             }
@@ -141,7 +136,6 @@ namespace battler
             {
                 startPosition = transform.position;
                 moving = true;
-                isPointerClicked = true;
                 canvasGroup.blocksRaycasts = true;
                 hand.SetDraggingCard(false);
             }
