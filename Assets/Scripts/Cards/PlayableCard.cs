@@ -19,7 +19,7 @@ namespace battler
         [SerializeField] private float onHoverScale = 1.25f;
         [SerializeField] private float onHoverOffsetY = 15f;
         [SerializeField] private float onHoverAnimTime = 0.33f;
-        [SerializeField] private float returnToHandAnimTime = 10f;
+        [SerializeField] private float returnToHandAnimTime = 0.5f;
         private Animation animation;
         private RectTransform transform;
         private CanvasGroup canvasGroup;
@@ -156,6 +156,11 @@ namespace battler
         public void setEndAnimPosition(Vector2 endPos)
         {
             endPosition = endPos;
+        }
+
+        public Vector2 getEndPosition()
+        {
+            return endPosition;
         }
     }
 }

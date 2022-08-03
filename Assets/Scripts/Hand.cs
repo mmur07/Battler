@@ -51,10 +51,18 @@ namespace battler
                 float yPos = Mathf.Sin((float)(k + 1) / (cards.Count + 1) * Mathf.PI) * handMaxHeight;
                 RectTransform cardTransform = cards[k].GetComponent<RectTransform>();
                 Vector2 endPosition = new Vector2(iniPos + (xJumpPerCard * (k + 1)), yPos);
-                if (!cards[k].isMoving()) cardTransform.anchoredPosition = endPosition;
-                else cards[k].setEndAnimPosition(endPosition);
+                Vector3 lookPos;
+                //If the card's moving, change the end position of the animation and the rotation as if it were already in place
+                if (!cards[k].isMoving())
+                {
+                    cardTransform.anchoredPosition = endPosition;
+                    lookPos = cardLookPosition.anchoredPosition - cardTransform.anchoredPosition;
+                }
+                else {
+                    cards[k].setEndAnimPosition(endPosition);
+                    lookPos = cardLookPosition.anchoredPosition - cards[k].getEndPosition();
+                }
 
-                Vector3 lookPos = cardLookPosition.anchoredPosition - cardTransform.anchoredPosition;
                 Quaternion rotation = Quaternion.LookRotation(lookPos);
                 cardTransform.rotation = rotation;
                 if(cardTransform.transform.rotation.y > 0) cardTransform.transform.Rotate(0, -90, 90);
