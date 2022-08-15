@@ -10,14 +10,15 @@ namespace battler
         [SerializeField] private float handMaxHeight = 15f;
         [SerializeField] private RectTransform canvas;
         [SerializeField] private RectTransform cardLookPosition;
+        [SerializeField] private BoardManager board;
         private List<PlayableCard> cards = new List<PlayableCard>();
 
-        private bool isDraggingCard = false;
+        private PlayableCard holdingCard = null;
 
         private void Start()
         {
 #if UNITY_EDITOR
-            if (canvas == null)
+            if (canvas == null || board == null)
             {
                 Debug.LogError("Hand: Missing reference from editor.");
                 return;
@@ -67,19 +68,35 @@ namespace battler
                 cardTransform.rotation = rotation;
                 if(cardTransform.transform.rotation.y > 0) cardTransform.transform.Rotate(0, -90, 90);
                 else cardTransform.transform.Rotate(0, 90, -90);
+
+                //Assign hand index
+                cards[k].setIndex(k);
             }
+        }
+
+        public void PickupCard(PlayableCard card)
+        {
+            holdingCard = card;
+        }
+
+        public bool DropCardInField(int index)
+        {
+            //Should ask the boardManager if there's enough space in board, if it's dropped in the correct position...
+            holdingCard = null;
+            if (board.DropCardInField(cards[index]))
+            {
+                cards.RemoveAt(index);
+                RecalculateCardPositions();
+                return true;
+            }
+            return false;
         }
 
         //---------------------------------------------------
 
-        public void SetDraggingCard(bool drag)
-        {
-            isDraggingCard = drag;
-        }
-
         public bool IsDraggingCard()
         {
-            return isDraggingCard;
+            return holdingCard != null;
         }
     }
 }

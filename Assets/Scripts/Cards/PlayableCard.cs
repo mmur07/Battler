@@ -20,18 +20,24 @@ namespace battler
         [SerializeField] private float onHoverOffsetY = 15f;
         [SerializeField] private float onHoverAnimTime = 0.33f;
         [SerializeField] private float returnToHandAnimTime = 0.5f;
+
+        //Gameobject components
         private Animation animation;
         private RectTransform transform;
         private CanvasGroup canvasGroup;
 
+        //Scene components
         private Canvas canvas;
         private Hand hand;
 
+        //Animation variables
         private Vector3 endPosition;
         private Vector3 startPosition;
         private float elapsedTime = 0f;
-
         private bool moving = false;
+
+        //Hand variables
+        private int handIndex;
 
         //----------------------------------------
         private void Start()
@@ -126,7 +132,7 @@ namespace battler
             {
                 endPosition = transform.anchoredPosition;
                 canvasGroup.blocksRaycasts = false;
-                hand.SetDraggingCard(true);
+                hand.PickupCard(this);
             }
         }
 
@@ -134,10 +140,13 @@ namespace battler
         {
             if (hand.IsDraggingCard())
             {
-                startPosition = transform.anchoredPosition;
-                moving = true;
-                canvasGroup.blocksRaycasts = true;
-                hand.SetDraggingCard(false);
+                //Returns true when the card can be positioned in the field
+                if (!hand.DropCardInField(handIndex))
+                {
+                    startPosition = transform.anchoredPosition;
+                    moving = true;
+                    canvasGroup.blocksRaycasts = true;
+                }
             }
         }
 
@@ -161,6 +170,16 @@ namespace battler
         public Vector2 getEndPosition()
         {
             return endPosition;
+        }
+
+        public void setIndex(int idx)
+        {
+            handIndex = idx;
+        }
+
+        public int getIndex()
+        {
+            return handIndex;
         }
     }
 }

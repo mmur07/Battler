@@ -3,10 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class BoardArea : MonoBehaviour, IDropHandler
+public class BoardArea : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public void OnDrop(PointerEventData eventData)
+    private bool isInsideArea = false;
+
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        
+        isInsideArea = true;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        isInsideArea = false;
+    }
+
+    //-------------------------------------------
+
+    public bool IsInsideArea()
+    {
+        return isInsideArea;
     }
 }

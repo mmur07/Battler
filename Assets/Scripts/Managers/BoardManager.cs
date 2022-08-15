@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace battler
 {
@@ -10,6 +11,7 @@ namespace battler
         [SerializeField] private GameObject spellCardPrefab;
         [SerializeField] private Canvas canvas;
         [SerializeField] private Hand playerHand;
+        [SerializeField] BoardArea board;
 
         public Minion minionToCreate;
         public Spell spellToCreate;
@@ -18,7 +20,7 @@ namespace battler
         void Start()
         {
 #if UNITY_EDITOR
-            if(minionCardPrefab == null || spellCardPrefab == null || canvas == null || playerHand == null)
+            if (minionCardPrefab == null || spellCardPrefab == null || canvas == null || playerHand == null || board == null)
             {
                 Debug.LogError("BoardManager: Missing reference from editor.");
                 return;
@@ -55,6 +57,12 @@ namespace battler
                     playerHand.AddCard(newSpellCard);
                     break;
             }
+        }
+
+        public bool DropCardInField(PlayableCard card)
+        {
+            if (board.IsInsideArea()) return true;
+            return false;
         }
     }
 }
