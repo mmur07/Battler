@@ -11,7 +11,7 @@ namespace battler
         [SerializeField] private GameObject spellCardPrefab;
         [SerializeField] private Canvas canvas;
         [SerializeField] private Hand playerHand;
-        [SerializeField] BoardArea board;
+        [SerializeField] Board board;
 
         public Minion minionToCreate;
         public Spell spellToCreate;
@@ -61,7 +61,10 @@ namespace battler
 
         public bool DropCardInField(PlayableCard card)
         {
-            if (board.IsInsideArea()) return true;
+            if (board.PlayCard(card))
+            {
+                return true;
+            }
             return false;
         }
     }
