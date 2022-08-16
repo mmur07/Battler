@@ -37,11 +37,6 @@ namespace battler
             cards.RemoveAt(cardIndex);
         }
 
-        private void Update()
-        {
-            //RecalculateCardPositions();
-        }
-
         private void RecalculateCardPositions()
         {
             float xJumpPerCard = handMaxWidth / (cards.Count + 1);
@@ -97,6 +92,11 @@ namespace battler
         public bool IsDraggingCard()
         {
             return holdingCard != null;
+        }
+
+        public PlayableCard GetDraggingCard()
+        {
+            return holdingCard;
         }
     }
 }

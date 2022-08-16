@@ -23,7 +23,7 @@ namespace battler
 
         //Gameobject components
         private Animation animation;
-        private RectTransform transform;
+        private RectTransform rectTransform;
         private CanvasGroup canvasGroup;
 
         //Scene components
@@ -45,7 +45,7 @@ namespace battler
         private void Start()
         {
             animation = GetComponentInChildren<Animation>();
-            transform = GetComponent<RectTransform>();
+            rectTransform = GetComponent<RectTransform>();
             canvasGroup = GetComponent<CanvasGroup>();
 #if UNITY_EDITOR
             if (animationRect == null || unhoverClip == null || hoverClip == null) {
@@ -63,7 +63,7 @@ namespace battler
                 elapsedTime += Time.deltaTime;
                 float percentageComplete = elapsedTime / returnToHandAnimTime;
 
-                transform.anchoredPosition = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0, 1, percentageComplete));
+                rectTransform.anchoredPosition = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0, 1, percentageComplete));
 
                 if(percentageComplete >= 1f)
                 {
@@ -132,7 +132,7 @@ namespace battler
         {
             if (!hand.IsDraggingCard() && !moving)
             {
-                endPosition = transform.anchoredPosition;
+                endPosition = rectTransform.anchoredPosition;
                 canvasGroup.blocksRaycasts = false;
                 hand.PickupCard(this);
             }
@@ -145,7 +145,7 @@ namespace battler
                 //Returns true when the card can be positioned in the field
                 if (!hand.DropCardInField(handIndex))
                 {
-                    startPosition = transform.anchoredPosition;
+                    startPosition = rectTransform.anchoredPosition;
                     moving = true;
                     canvasGroup.blocksRaycasts = true;
                 }
@@ -154,7 +154,7 @@ namespace battler
 
         public void OnDrag(PointerEventData eventData)
         {
-            if(hand.IsDraggingCard()) transform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+            if(hand.IsDraggingCard()) rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
         }
 
         //------------------------------------------------------

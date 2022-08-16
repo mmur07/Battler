@@ -14,7 +14,9 @@ namespace battler
         [SerializeField] private Hand playerHand;
         [SerializeField] Board board;
 
-        public Minion minionToCreate;
+        [Header("Testing purposes, please delete me ")]
+        public Minion minionToCreate1;
+        public Minion minionToCreate2;
         public Spell spellToCreate;
 
         //------------------------------------------------------
@@ -29,13 +31,13 @@ namespace battler
             }
 #endif
 
-            AddCardToHand(minionToCreate);
+            AddCardToHand(minionToCreate1);
             AddCardToHand(spellToCreate);
-            AddCardToHand(minionToCreate);
-            AddCardToHand(minionToCreate);
-            AddCardToHand(minionToCreate);
-            AddCardToHand(minionToCreate);
-            AddCardToHand(minionToCreate);
+            AddCardToHand(minionToCreate2);
+            AddCardToHand(minionToCreate1);
+            AddCardToHand(minionToCreate2);
+            AddCardToHand(minionToCreate1);
+            AddCardToHand(minionToCreate2);
         }
 
         public void AddCardToHand(Card card)
@@ -46,7 +48,7 @@ namespace battler
                 case CardType.Minion:
                     c = Instantiate(minionCardPrefab, playerHand.transform);
                     MinionCard newMinionCard = c.GetComponent<MinionCard>();
-                    newMinionCard.Init(minionToCreate);
+                    newMinionCard.Init((Minion)card);
                     newMinionCard.SetReferences(canvas, playerHand);
                     playerHand.AddCard(newMinionCard);
                     break;
@@ -54,7 +56,7 @@ namespace battler
                 case CardType.Spell:
                     c = Instantiate(spellCardPrefab, playerHand.transform);
                     SpellCard newSpellCard = c.GetComponent<SpellCard>();
-                    newSpellCard.Init(spellToCreate);
+                    newSpellCard.Init((Spell)card);
                     newSpellCard.SetReferences(canvas, playerHand);
                     playerHand.AddCard(newSpellCard);
                     break;
