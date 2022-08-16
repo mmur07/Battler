@@ -36,10 +36,12 @@ namespace battler
         private float elapsedTime = 0f;
         private bool moving = false;
 
-        //Hand variables
+        //Misc
         private int handIndex;
+        protected CardType cardType = CardType.None;
 
         //----------------------------------------
+
         private void Start()
         {
             animation = GetComponentInChildren<Animation>();
@@ -71,17 +73,17 @@ namespace battler
             }
         }
 
-        public void setName(string name)
+        public void SetName(string name)
         {
             nameText.text = name;
         }
 
-        public void setDescription(string description)
+        public void SetDescription(string description)
         {
             descriptionText.text = description;
         }
 
-        public void setSprite(Sprite sprt)
+        public void SetSprite(Sprite sprt)
         {
             sprite.sprite = sprt;
         }
@@ -157,29 +159,34 @@ namespace battler
 
         //------------------------------------------------------
 
-        public bool isMoving()
+        public bool IsMoving()
         {
             return moving;
         }
 
-        public void setEndAnimPosition(Vector2 endPos)
+        public void SetEndAnimPosition(Vector2 endPos)
         {
             endPosition = endPos;
         }
 
-        public Vector2 getEndPosition()
+        public Vector2 GetEndPosition()
         {
             return endPosition;
         }
 
-        public void setIndex(int idx)
+        public void SetIndex(int idx)
         {
             handIndex = idx;
         }
 
-        public int getIndex()
+        public int GetIndex()
         {
             return handIndex;
+        }
+
+        public CardType GetCardType()
+        {
+            return cardType;
         }
     }
 }

@@ -18,12 +18,13 @@ namespace battler
         public void Init(Minion minionBase)
         {
             minion = minionBase;
+            cardType = CardType.Minion;
 
             setHP(minion.getBaseHP());
             setATK(minion.getBaseAtk());
-            setName(minion.GetName());
-            setDescription(minion.GetDescription());
-            setSprite(minion.GetArt());
+            SetName(minion.GetName());
+            SetDescription(minion.GetDescription());
+            SetSprite(minion.GetArt());
         }
 
         //-----------------------------------------------
@@ -36,6 +37,11 @@ namespace battler
         public void setATK(int atk)
         {
             atkText.text = atk.ToString();
+        }
+
+        public Minion GetCard()
+        {
+            return minion;
         }
     }
 }

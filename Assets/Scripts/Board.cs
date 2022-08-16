@@ -9,27 +9,27 @@ namespace battler
         [SerializeField] int maxMinions = 6;
         [SerializeField] float minionOffset = 20f;
 
-        private List<PlayableCard> minionsOnBoard = new List<PlayableCard>();
+        private List<MinionBody> minionsOnBoard = new List<MinionBody>();
 
         private RectTransform rect = null;
+
+        //------------------------------------------------------
 
         private void Start()
         {
             rect = GetComponent<RectTransform>();
         }
 
-        public bool PlayCard(PlayableCard minion)
+        public bool IsFull()
         {
-            if(IsInsideArea() && minionsOnBoard.Count < maxMinions)
-            {
-                minionsOnBoard.Add(minion);
-                //Tranfer parentship to board.
-                minion.transform.SetParent(transform);
-                minion.GetComponent<RectTransform>().rotation = Quaternion.identity;
-                RecalculateMinionPositions();
-                return true;
-            }
-            return false;
+            return minionsOnBoard.Count >= maxMinions;
+        }
+
+        public void PlayCard(MinionBody minion)
+        {
+            minionsOnBoard.Add(minion);
+            //Tranfer parentship from hand to board.
+            RecalculateMinionPositions();
         }
 
         private void RecalculateMinionPositions()

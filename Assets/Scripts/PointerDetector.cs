@@ -9,6 +9,8 @@ namespace battler
     {
         private bool insideArea = false;
 
+        //------------------------------------------------------
+
         public virtual void OnPointerEnter(PointerEventData eventData)
         {
             insideArea = true;

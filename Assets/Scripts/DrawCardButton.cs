@@ -9,6 +9,8 @@ namespace battler
         [SerializeField] private BoardManager boardManager;
         [SerializeField] private List<Card> cardDrawList;
 
+        //------------------------------------------------------
+
         private void Start()
         {
             if (boardManager == null || cardDrawList.Count == 0)

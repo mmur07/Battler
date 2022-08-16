@@ -27,7 +27,8 @@ namespace battler{
         //------------------------------------------
 
         public override void Play(){
-
+            currentATK = baseAtk;
+            currentHP = baseHP;
         }
 
         public void ModifyAttack(int atkModifier){

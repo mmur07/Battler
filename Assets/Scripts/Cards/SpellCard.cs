@@ -10,13 +10,21 @@ namespace battler
     {
         private Spell spell;
 
+        //-----------------------------------------------------
+
         public void Init(Spell spellBase)
         {
             spell = spellBase;
+            cardType = CardType.Spell;
 
-            setName(spell.GetName());
-            setDescription(spell.GetDescription());
-            setSprite(spell.GetArt());
+            SetName(spell.GetName());
+            SetDescription(spell.GetDescription());
+            SetSprite(spell.GetArt());
+        }
+
+        public Spell GetCard()
+        {
+            return spell;
         }
     }
 }

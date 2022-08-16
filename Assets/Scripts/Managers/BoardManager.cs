@@ -9,6 +9,7 @@ namespace battler
     {
         [SerializeField] private GameObject minionCardPrefab;
         [SerializeField] private GameObject spellCardPrefab;
+        [SerializeField] private GameObject minionBodyPrefab;
         [SerializeField] private Canvas canvas;
         [SerializeField] private Hand playerHand;
         [SerializeField] Board board;
@@ -16,11 +17,12 @@ namespace battler
         public Minion minionToCreate;
         public Spell spellToCreate;
 
-        // Start is called before the first frame update
+        //------------------------------------------------------
+
         void Start()
         {
 #if UNITY_EDITOR
-            if (minionCardPrefab == null || spellCardPrefab == null || canvas == null || playerHand == null || board == null)
+            if (minionCardPrefab == null || spellCardPrefab == null || canvas == null || playerHand == null || board == null || minionBodyPrefab == null)
             {
                 Debug.LogError("BoardManager: Missing reference from editor.");
                 return;
@@ -61,9 +63,20 @@ namespace battler
 
         public bool DropCardInField(PlayableCard card)
         {
-            if (board.PlayCard(card))
+            if (board.IsInsideArea())
             {
-                return true;
+                if (card.GetCardType() == CardType.Minion && !board.IsFull())
+                {
+                    MinionCard mCard = (MinionCard)card;
+                    GameObject m = Instantiate(minionBodyPrefab, board.transform);
+                    MinionBody newMinionBody = m.GetComponent<MinionBody>();
+                    newMinionBody.Init(mCard.GetCard());
+                    board.PlayCard(newMinionBody);
+
+                    Destroy(card.gameObject);
+                    return true;
+                }
+                //Spells are WIP
             }
             return false;
         }

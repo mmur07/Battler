@@ -54,14 +54,14 @@ namespace battler
                 Vector2 endPosition = new Vector2(iniPos + (xJumpPerCard * (k + 1)), yPos);
                 Vector3 lookPos;
                 //If the card's moving, change the end position of the animation and the rotation as if it were already in place
-                if (!cards[k].isMoving())
+                if (!cards[k].IsMoving())
                 {
                     cardTransform.anchoredPosition = endPosition;
                     lookPos = cardLookPosition.anchoredPosition - cardTransform.anchoredPosition;
                 }
                 else {
-                    cards[k].setEndAnimPosition(endPosition);
-                    lookPos = cardLookPosition.anchoredPosition - cards[k].getEndPosition();
+                    cards[k].SetEndAnimPosition(endPosition);
+                    lookPos = cardLookPosition.anchoredPosition - cards[k].GetEndPosition();
                 }
 
                 Quaternion rotation = Quaternion.LookRotation(lookPos);
@@ -70,7 +70,7 @@ namespace battler
                 else cardTransform.transform.Rotate(0, 90, -90);
 
                 //Assign hand index
-                cards[k].setIndex(k);
+                cards[k].SetIndex(k);
             }
         }
 
