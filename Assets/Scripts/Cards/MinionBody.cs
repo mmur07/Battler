@@ -16,11 +16,9 @@ namespace battler
         private Minion baseMinion;
 
         //LERP Animation variables
-        private bool moving = false;
-        private Vector2 endPosition;
-        private Vector2 startPosition;
-        private float elapsedTime = 0f;
         private RectTransform rectTransform;
+        private bool moving = false;
+        private Coroutine translateCoroutine = null;
 
         //------------------------------------------------
 
@@ -31,12 +29,18 @@ namespace battler
 
         private void Update()
         {
-            
+            if (IsMoving()) Debug.Log("YEP");
+            else Debug.Log("NOP");
         }
 
-        private IEnumerator TranslateToEndPosition()
+        private IEnumerator TranslateToEndPosition(Vector2 endPosition)
         {
             float percentageComplete = 0f;
+            float elapsedTime = 0f;
+            moving = true;
+
+            Vector2 startPosition = rectTransform.anchoredPosition;
+
             while(percentageComplete < 1f)
             {
                 elapsedTime += Time.deltaTime;
@@ -45,8 +49,9 @@ namespace battler
 
                 yield return null; //Wait for next frame
             }
-            elapsedTime = 0f;
+
             moving = false;
+            translateCoroutine = null;
         }
 
         public void Init(Minion minion)
@@ -59,10 +64,12 @@ namespace battler
 
         public void AnimatedTranslation(Vector2 position)
         {
-            moving = true;
-            startPosition = rectTransform.anchoredPosition;
-            StartCoroutine(TranslateToEndPosition());
-            endPosition = position;
+            if (IsMoving()) //If there's already a coroutine active, kill it and start a new animation from the current position.
+            {
+                StopCoroutine(translateCoroutine);
+            }
+
+            translateCoroutine = StartCoroutine(TranslateToEndPosition(position));
         }
 
         //---------------------------------------------------------
@@ -80,11 +87,6 @@ namespace battler
         public bool IsMoving()
         {
             return moving;
-        }
-
-        public void SetAnimatedTranslationDestination(Vector2 position)
-        {
-            if(moving) endPosition = position;
         }
     }
 }

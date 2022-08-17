@@ -72,7 +72,6 @@ namespace battler
 
                 rectTransform.anchoredPosition = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0, 1, percentageComplete));
 
-                Debug.Log(percentageComplete);
                 yield return null;
             }
 

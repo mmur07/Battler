@@ -72,7 +72,6 @@ namespace battler
             Vector3[] corners = new Vector3[4];
             rectTransform.GetWorldCorners(corners);
             float xPos = Input.mousePosition.x - corners[0].x - corners[3].x * 0.5f;
-            Debug.Log(xPos);
             if (minionsOnBoard.Count == 0) return 0;
             if (xPos < minionPositions[minionsOnBoard.Count][0]) return 0;
             if (minionsOnBoard.Count == 1 && xPos > minionPositions[minionsOnBoard.Count][0]) return 1;
@@ -94,7 +93,7 @@ namespace battler
         {
             for(int k = 0; k < minionsOnBoard.Count; k++)
             {
-                if(minionsOnBoard[k].IsMoving()) minionsOnBoard[k].SetAnimatedTranslationDestination(new Vector2(minionPositions[minionsOnBoard.Count][k], 0));
+                if(minionsOnBoard[k].IsMoving()) minionsOnBoard[k].AnimatedTranslation(new Vector2(minionPositions[minionsOnBoard.Count][k], 0));
                 else minionsOnBoard[k].GetComponent<RectTransform>().anchoredPosition = new Vector2(minionPositions[minionsOnBoard.Count][k], 0);
             }
         }
