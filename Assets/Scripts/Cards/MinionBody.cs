@@ -31,20 +31,22 @@ namespace battler
 
         private void Update()
         {
-            //Apply LERP animation
-            if (moving)
+            
+        }
+
+        private IEnumerator TranslateToEndPosition()
+        {
+            float percentageComplete = 0f;
+            while(percentageComplete < 1f)
             {
                 elapsedTime += Time.deltaTime;
-                float percentageComplete = elapsedTime / minionSeparationAnimTime;
-                Debug.Log(percentageComplete);
+                percentageComplete = elapsedTime / minionSeparationAnimTime;
                 rectTransform.anchoredPosition = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0, 1, percentageComplete));
 
-                if (percentageComplete >= 1f)
-                {
-                    elapsedTime = 0f;
-                    moving = false;
-                }
+                yield return null; //Wait for next frame
             }
+            elapsedTime = 0f;
+            moving = false;
         }
 
         public void Init(Minion minion)
@@ -59,6 +61,7 @@ namespace battler
         {
             moving = true;
             startPosition = rectTransform.anchoredPosition;
+            StartCoroutine(TranslateToEndPosition());
             endPosition = position;
         }
 

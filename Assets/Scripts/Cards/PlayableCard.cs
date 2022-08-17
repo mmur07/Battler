@@ -57,20 +57,27 @@ namespace battler
 
         private void Update()
         {
-            //Apply LERP animation
-            if(moving)
-            {
+
+        }
+
+        //At first glance it may make more sense to pass the startPos and endPos here, but sometimes we need to change these variables (specially endPos) mid-animation.
+        //There is probably a better solution, but i'm keeping it as it is ATM.
+        private IEnumerator TranslateToEndPosition()
+        {
+            float percentageComplete = 0f;
+            while (percentageComplete < 1f) { 
+
                 elapsedTime += Time.deltaTime;
-                float percentageComplete = elapsedTime / returnToHandAnimTime;
+                percentageComplete = elapsedTime / returnToHandAnimTime;
 
                 rectTransform.anchoredPosition = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0, 1, percentageComplete));
 
-                if(percentageComplete >= 1f)
-                {
-                    elapsedTime = 0f;
-                    moving = false;
-                }
+                Debug.Log(percentageComplete);
+                yield return null;
             }
+
+            elapsedTime = 0f;
+            moving = false;
         }
 
         public void SetName(string name)
@@ -128,6 +135,8 @@ namespace battler
             }
         }
 
+        //If the card is returned to the player's hand (not placed in board, board fulll...) it plays a return to hand animation. When starting to drag the card,
+        //we save this position for the animation.
         public void OnBeginDrag(PointerEventData eventData)
         {
             if (!hand.IsDraggingCard() && !moving)
@@ -138,6 +147,7 @@ namespace battler
             }
         }
 
+        //When the player's finished dragging a card, if it can't be played it returns to the player's hand, so it plays the return to hand animation.
         public void OnEndDrag(PointerEventData eventData)
         {
             if (hand.IsDraggingCard())
@@ -147,6 +157,7 @@ namespace battler
                 {
                     startPosition = rectTransform.anchoredPosition;
                     moving = true;
+                    StartCoroutine(TranslateToEndPosition());
                     canvasGroup.blocksRaycasts = true;
                 }
             }
