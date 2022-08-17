@@ -55,11 +55,6 @@ namespace battler
 #endif
         }
 
-        private void Update()
-        {
-
-        }
-
         //At first glance it may make more sense to pass the startPos and endPos here, but sometimes we need to change these variables (specially endPos) mid-animation.
         //There is probably a better solution, but i'm keeping it as it is ATM.
         private IEnumerator TranslateToEndPosition()

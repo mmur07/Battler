@@ -30,6 +30,12 @@ namespace battler
                 return;
             }
 #endif
+            StartCoroutine(AddInitialCards());
+        }
+
+        IEnumerator AddInitialCards() //Testing purposes only. Coroutine because this need to be executed after all scene's Start() methods.
+        {
+            yield return null; //Skip 1st frame.
 
             AddCardToHand(minionToCreate1);
             AddCardToHand(spellToCreate);
@@ -42,24 +48,27 @@ namespace battler
 
         public void AddCardToHand(Card card)
         {
-            GameObject c;
-            switch (card.type)
+            if (playerHand.IsFull())
             {
-                case CardType.Minion:
-                    c = Instantiate(minionCardPrefab, playerHand.transform);
-                    MinionCard newMinionCard = c.GetComponent<MinionCard>();
-                    newMinionCard.Init((Minion)card);
-                    newMinionCard.SetReferences(canvas, playerHand);
-                    playerHand.AddCard(newMinionCard);
-                    break;
+                GameObject c;
+                switch (card.type)
+                {
+                    case CardType.Minion:
+                        c = Instantiate(minionCardPrefab, playerHand.transform);
+                        MinionCard newMinionCard = c.GetComponent<MinionCard>();
+                        newMinionCard.Init((Minion)card);
+                        newMinionCard.SetReferences(canvas, playerHand);
+                        playerHand.AddCard(newMinionCard);
+                        break;
 
-                case CardType.Spell:
-                    c = Instantiate(spellCardPrefab, playerHand.transform);
-                    SpellCard newSpellCard = c.GetComponent<SpellCard>();
-                    newSpellCard.Init((Spell)card);
-                    newSpellCard.SetReferences(canvas, playerHand);
-                    playerHand.AddCard(newSpellCard);
-                    break;
+                    case CardType.Spell:
+                        c = Instantiate(spellCardPrefab, playerHand.transform);
+                        SpellCard newSpellCard = c.GetComponent<SpellCard>();
+                        newSpellCard.Init((Spell)card);
+                        newSpellCard.SetReferences(canvas, playerHand);
+                        playerHand.AddCard(newSpellCard);
+                        break;
+                }
             }
         }
 

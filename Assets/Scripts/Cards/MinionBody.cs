@@ -27,12 +27,6 @@ namespace battler
             rectTransform = GetComponent<RectTransform>();
         }
 
-        private void Update()
-        {
-            if (IsMoving()) Debug.Log("YEP");
-            else Debug.Log("NOP");
-        }
-
         private IEnumerator TranslateToEndPosition(Vector2 endPosition)
         {
             float percentageComplete = 0f;
