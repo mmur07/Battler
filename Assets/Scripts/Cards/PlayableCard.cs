@@ -32,8 +32,7 @@ namespace battler
 
         //Animation variables
         private Vector3 endPosition;
-        private Vector3 startPosition;
-        private float elapsedTime = 0f;
+        private Quaternion endRotation;
         private bool moving = false;
 
         //Misc
@@ -55,22 +54,27 @@ namespace battler
 #endif
         }
 
-        //At first glance it may make more sense to pass the startPos and endPos here, but sometimes we need to change these variables (specially endPos) mid-animation.
-        //There is probably a better solution, but i'm keeping it as it is ATM.
-        private IEnumerator TranslateToEndPosition()
+        private IEnumerator TranslateToEndPosition(Vector2 endPos, Quaternion endRot)
         {
-            float percentageComplete = 0f;
-            while (percentageComplete < 1f) { 
+            float percentageComplete = 0.01f;
+            float elapsedTime = 0f;
 
+            endPosition = endPos;
+            endRotation = endRot;
+
+            Vector2 startPosition = rectTransform.anchoredPosition;
+            Quaternion startRotation = rectTransform.rotation;
+
+            while (percentageComplete < 1f) {
+                Debug.Log(endRotation);
                 elapsedTime += Time.deltaTime;
                 percentageComplete = elapsedTime / returnToHandAnimTime;
 
                 rectTransform.anchoredPosition = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0, 1, percentageComplete));
+                rectTransform.rotation = Quaternion.Lerp(startRotation, endRotation, Mathf.SmoothStep(0, 0.99f, percentageComplete));
 
                 yield return null;
             }
-
-            elapsedTime = 0f;
             moving = false;
         }
 
@@ -136,7 +140,10 @@ namespace battler
             if (!hand.IsDraggingCard() && !moving)
             {
                 endPosition = rectTransform.anchoredPosition;
+                endRotation = rectTransform.rotation;
                 canvasGroup.blocksRaycasts = false;
+
+                rectTransform.rotation = Quaternion.identity;
                 hand.PickupCard(this);
             }
         }
@@ -149,9 +156,8 @@ namespace battler
                 //Returns true when the card can be positioned in the field
                 if (!hand.DropCardInField(handIndex))
                 {
-                    startPosition = rectTransform.anchoredPosition;
                     moving = true;
-                    StartCoroutine(TranslateToEndPosition());
+                    StartCoroutine(TranslateToEndPosition(endPosition, endRotation));
                     canvasGroup.blocksRaycasts = true;
                 }
             }
@@ -172,6 +178,11 @@ namespace battler
         public void SetEndAnimPosition(Vector2 endPos)
         {
             endPosition = endPos;
+        }
+
+        public void SetEndAnimRotation(Quaternion endRot)
+        {
+            endRotation = endRot;
         }
 
         public Vector2 GetEndPosition()

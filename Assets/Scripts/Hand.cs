@@ -59,6 +59,8 @@ namespace battler
                     lookPos = cardLookPosition.anchoredPosition - cardPos;
 
                     Quaternion rotation = Quaternion.LookRotation(lookPos);
+                    if (rotation.y > 0) rotation *= Quaternion.Euler(0, -90, 90);
+                    else rotation *= Quaternion.Euler(0, 90, -90);
 
                     CardPlacementData cardPlacement;
                     cardPlacement.position = cardPos;
@@ -93,12 +95,8 @@ namespace battler
                 }
                 else {
                     cards[k].SetEndAnimPosition(cardPositions[cards.Count][k].position);
-                    Vector2 lookPos = cardLookPosition.anchoredPosition - cards[k].GetEndPosition();
-
-                    cardTransform.rotation = Quaternion.LookRotation(lookPos);
+                    cards[k].SetEndAnimRotation(cardPositions[cards.Count][k].rotation);
                 }
-                if(cardTransform.transform.rotation.y > 0) cardTransform.transform.Rotate(0, -90, 90);
-                else cardTransform.transform.Rotate(0, 90, -90);
 
                 //Assign hand index
                 cards[k].SetIndex(k);
