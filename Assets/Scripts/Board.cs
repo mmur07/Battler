@@ -106,6 +106,11 @@ namespace battler
         public virtual void OnPointerExit(PointerEventData eventData)
         {
             insideArea = false;
+            if (hand.IsDraggingCard())
+            {
+                hoveringCardPositionIndex = -1;
+                SetMinionsPosition();
+            }
         }
 
         //-------------------------------------------------------

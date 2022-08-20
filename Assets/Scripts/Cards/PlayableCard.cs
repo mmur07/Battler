@@ -54,7 +54,7 @@ namespace battler
 #endif
         }
 
-        private IEnumerator TranslateToEndPosition(Vector2 endPos, Quaternion endRot)
+        private IEnumerator TranslateAnimationCoroutine(Vector2 endPos, Quaternion endRot)
         {
             float percentageComplete = 0.01f;
             float elapsedTime = 0f;
@@ -66,7 +66,6 @@ namespace battler
             Quaternion startRotation = rectTransform.rotation;
 
             while (percentageComplete < 1f) {
-                Debug.Log(endRotation);
                 elapsedTime += Time.deltaTime;
                 percentageComplete = elapsedTime / returnToHandAnimTime;
 
@@ -75,6 +74,7 @@ namespace battler
 
                 yield return null;
             }
+
             moving = false;
         }
 
@@ -95,6 +95,10 @@ namespace battler
 
         public void SetReferences(Canvas cnvas, Hand playerHand)
         {
+            animation = GetComponentInChildren<Animation>();
+            rectTransform = GetComponent<RectTransform>();
+            canvasGroup = GetComponent<CanvasGroup>();
+
             canvas = cnvas;
             hand = playerHand;
         }
@@ -156,11 +160,16 @@ namespace battler
                 //Returns true when the card can be positioned in the field
                 if (!hand.DropCardInField(handIndex))
                 {
-                    moving = true;
-                    StartCoroutine(TranslateToEndPosition(endPosition, endRotation));
-                    canvasGroup.blocksRaycasts = true;
+                   TranslateAnimation(endPosition, endRotation);
                 }
             }
+        }
+
+        public void TranslateAnimation(Vector2 endPos, Quaternion endRot)
+        {
+            moving = true;
+            StartCoroutine(TranslateAnimationCoroutine(endPos, endRot));
+            canvasGroup.blocksRaycasts = true;
         }
 
         public void OnDrag(PointerEventData eventData)

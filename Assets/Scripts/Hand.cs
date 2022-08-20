@@ -74,7 +74,7 @@ namespace battler
         public void AddCard(PlayableCard newCard)
         {
             cards.Add(newCard);
-            RepositionCards();
+            RepositionHand();
         }
 
         public void UseCard(int cardIndex)
@@ -82,30 +82,52 @@ namespace battler
             cards.RemoveAt(cardIndex);
         }
 
-        private void RepositionCards()
+        private void RepositionHand()
         {
-            for(int k = 0; k < cards.Count; k++)
+            for (int k = 0; k < cards.Count; k++)
             {
-                RectTransform cardTransform = cards[k].GetComponent<RectTransform>();
-                //If the card's moving, change the end position of the animation and the rotation as if it were already in place
-                if (!cards[k].IsMoving())
-                {
-                    cardTransform.anchoredPosition = cardPositions[cards.Count][k].position;
-                    cardTransform.rotation = cardPositions[cards.Count][k].rotation;
-                }
-                else {
-                    cards[k].SetEndAnimPosition(cardPositions[cards.Count][k].position);
-                    cards[k].SetEndAnimRotation(cardPositions[cards.Count][k].rotation);
-                }
-
-                //Assign hand index
-                cards[k].SetIndex(k);
+                RepositionCard(k, cardPositions[cards.Count][k].position, cardPositions[cards.Count][k].rotation);
             }
+        }
+
+        private void RepositionHand(int ignoreCard)
+        {
+            if (ignoreCard > cards.Count)
+            {
+                Debug.LogError("Index of ignored card greater than number of cards");
+                return;
+            }
+
+            for(int k = 0; k < ignoreCard; k++)
+            {
+                RepositionCard(k, cardPositions[cards.Count - 1][k].position, cardPositions[cards.Count - 1][k].rotation);
+            }
+            for (int k = ignoreCard + 1; k < cards.Count; k++)
+            {
+                RepositionCard(k, cardPositions[cards.Count - 1][k - 1].position, cardPositions[cards.Count - 1][k - 1].rotation);
+            }
+        }
+
+        private void RepositionCard(int cardIdx, Vector2 pos, Quaternion rot)
+        {
+            //If the card's moving, change the end position of the animation and the rotation as if it were already in place
+            if (!cards[cardIdx].IsMoving())
+            {
+                cards[cardIdx].TranslateAnimation(pos, rot);
+            }
+            else
+            {
+                cards[cardIdx].SetEndAnimPosition(pos);
+                cards[cardIdx].SetEndAnimRotation(rot);
+            }
+
+            cards[cardIdx].SetIndex(cardIdx);
         }
 
         public void PickupCard(PlayableCard card)
         {
             holdingCard = card;
+            RepositionHand(card.GetIndex());
         }
 
         public bool DropCardInField(int index)
@@ -115,9 +137,10 @@ namespace battler
             if (board.DropCardInField(cards[index]))
             {
                 cards.RemoveAt(index);
-                RepositionCards();
+                RepositionHand();
                 return true;
             }
+            RepositionHand();
             return false;
         }
 
